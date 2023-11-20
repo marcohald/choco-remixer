@@ -10,9 +10,14 @@ Function Test-PushPackage {
     }
 
     Test-URL -url $URL -name $name
-
-    $apiKeySources = Get-ChocoApiKeysUrlList
-    if ($apiKeySources -notcontains $URL) {
-        Write-Verbose "Did not find a API key for $name"
+    try {
+        $apiKeySources = Get-ChocoApiKeysUrlList
+        if ($apiKeySources -notcontains $URL) {
+            Write-Verbose "Did not find a API key for $name"
+        }
     }
+    catch {
+        Write-Warning "Error details:`n$($PSItem.ToString())`n$($PSItem.InvocationInfo.Line)`n$($PSItem.ScriptStackTrace)"
+    }
+
 }
